@@ -1,0 +1,58 @@
+---
+import CategoryChip from './CategoryChip.astro';
+
+interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      description: string;
+      pubDate: Date;
+      categories: string[];
+      image?: string;
+    };
+  };
+}
+const { post } = Astro.props;
+const d = post.data.pubDate;
+const dateStr = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+---
+
+<article
+  class="flex gap-4 py-5 border-b"
+  style="border-color: var(--c-border);"
+>
+  {
+    post.data.image && (
+      <a href={`/${post.id}/`} class="flex-shrink-0 hidden sm:block" tabindex="-1" aria-hidden="true">
+        <img
+          src={post.data.image}
+          alt=""
+          width="160"
+          height="90"
+          loading="lazy"
+          class="rounded-md border object-cover w-40 h-24"
+          style="border-color: var(--c-border);"
+        />
+      </a>
+    )
+  }
+  <div class="min-w-0">
+    <div class="flex flex-wrap items-center gap-2 mb-1">
+      <time datetime={d.toISOString()} class="text-xs" style="color: var(--c-sub);">{dateStr}</time>
+      {post.data.categories.map((c) => <CategoryChip name={c} />)}
+    </div>
+    <h2 class="m-0 text-lg font-bold leading-snug">
+      <a href={`/${post.id}/`} class="no-underline hover:underline" style="color: var(--c-ink);"
+        >{post.data.title}</a
+      >
+    </h2>
+    {
+      post.data.description && (
+        <p class="m-0 mt-1 text-sm line-clamp-2" style="color: var(--c-sub);">
+          {post.data.description}
+        </p>
+      )
+    }
+  </div>
+</article>

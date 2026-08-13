@@ -1,0 +1,136 @@
+---
+import Base from './Base.astro';
+import Ad from '../components/Ad.astro';
+import CategoryChip from '../components/CategoryChip.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  categories?: string[];
+  image?: string;
+  headings?: Heading[];
+  prev?: { id: string; title: string } | null;
+  next?: { id: string; title: string } | null;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  categories = [],
+  image,
+  headings = [],
+  prev = null,
+  next = null,
+} = Astro.props;
+
+const fmt = (d: Date) => `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<Base title={title} description={description} ogImage={image} ogType="article">
+  <nav aria-label="パンくずリスト" class="text-xs mb-4" style="color: var(--c-sub);">
+    <ol class="flex flex-wrap gap-1 list-none m-0 p-0">
+      <li><a href="/">ホーム</a><span aria-hidden="true" class="mx-1">›</span></li>
+      {
+        categories[0] && (
+          <li>
+            <a href={`/category/${categories[0]}/`}>{categories[0]}</a>
+            <span aria-hidden="true" class="mx-1">›</span>
+          </li>
+        )
+      }
+      <li aria-current="page" class="truncate max-w-60">{title}</li>
+    </ol>
+  </nav>
+
+  <article data-pagefind-body>
+    <header class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-bold leading-snug m-0">{title}</h1>
+      <div class="flex flex-wrap items-center gap-2 mt-3 text-sm" style="color: var(--c-sub);">
+        <time datetime={pubDate.toISOString()}>公開: {fmt(pubDate)}</time>
+        {
+          updatedDate && (
+            <time datetime={updatedDate.toISOString()}>更新: {fmt(updatedDate)}</time>
+          )
+        }
+        <span class="flex flex-wrap gap-1.5" data-pagefind-ignore>
+          {categories.map((c) => <CategoryChip name={c} />)}
+        </span>
+      </div>
+    </header>
+
+    <div data-pagefind-ignore>
+      <Ad slot="1243417992" />
+    </div>
+
+    {
+      tocHeadings.length >= 2 && (
+        <nav class="toc mb-8" aria-label="目次" data-pagefind-ignore>
+          <p class="toc-title m-0">目次</p>
+          <ol>
+            {tocHeadings.map((h) => (
+              <li class={`toc-depth-${h.depth}`}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+
+    <div class="article-body">
+      <slot />
+    </div>
+
+    <div data-pagefind-ignore>
+      <Ad slot="8126189415" />
+    </div>
+  </article>
+
+  {
+    (prev || next) && (
+      <nav aria-label="前後の記事" class="mt-10 grid sm:grid-cols-2 gap-3" data-pagefind-ignore>
+        {prev ? (
+          <a
+            href={`/${prev.id}/`}
+            class="no-underline border rounded-lg p-4 hover:underline"
+            style="border-color: var(--c-border);"
+          >
+            <span class="block text-xs mb-1" style="color: var(--c-sub);">
+              ← 前の記事
+            </span>
+            <span class="text-sm font-medium" style="color: var(--c-ink);">
+              {prev.title}
+            </span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a
+            href={`/${next.id}/`}
+            class="no-underline border rounded-lg p-4 hover:underline sm:text-right"
+            style="border-color: var(--c-border);"
+          >
+            <span class="block text-xs mb-1" style="color: var(--c-sub);">
+              次の記事 →
+            </span>
+            <span class="text-sm font-medium" style="color: var(--c-ink);">
+              {next.title}
+            </span>
+          </a>
+        )}
+      </nav>
+    )
+  }
+</Base>

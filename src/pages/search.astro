@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="サイト内検索" description="テックろぐのサイト内検索です。">
+  <h1 class="text-xl font-bold mb-4 pb-2 border-b-2" style="border-color: var(--c-primary);">
+    サイト内検索
+  </h1>
+  <div id="search" class="search-wrap"></div>
+  <p class="text-xs mt-4" style="color: var(--c-sub);">
+    ※ 検索インデックスはビルド時に生成されます(開発サーバーでは動作しません)。
+  </p>
+
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.PagefindUI) {
+        new PagefindUI({
+          element: '#search',
+          showSubResults: true,
+          translations: {
+            placeholder: 'キーワードを入力',
+            zero_results: '「[SEARCH_TERM]」に一致する記事は見つかりませんでした',
+          },
+        });
+      }
+    });
+  </script>
+</Base>

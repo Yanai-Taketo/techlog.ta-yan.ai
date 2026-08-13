@@ -1,0 +1,331 @@
+@import 'tailwindcss';
+@import '@digital-go-jp/tailwind-theme-plugin/v4';
+
+/* ============================================================
+   デジタル庁デザインシステム(DADS)ベースのサイト全体スタイル
+   カラートークンは design-tokens v2 系の値を使用
+   ============================================================ */
+:root {
+  --c-primary: #0017c1;        /* blue-900(プライマリカラー) */
+  --c-primary-dark: #00118f;   /* blue-1000(ホバー) */
+  --c-primary-bg: #e8f1fe;     /* blue-100(薄背景) */
+  --c-ink: #1a1a1c;            /* solid-gray-900(本文) */
+  --c-sub: #595959;            /* テキストサブ */
+  --c-border: #d8d8db;         /* solid-gray-300(罫線) */
+  --c-bg: #ffffff;
+  --c-bg-sub: #f1f1f4;         /* solid-gray-50 */
+  --c-warning-bg: #fbf1d8;
+  --c-warning-border: #927200;
+  --c-error: #ec0000;          /* error-1 */
+  --c-focus: #fbf500;          /* フォーカスイエロー */
+}
+
+html {
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  color: var(--c-ink);
+  background: var(--c-bg);
+  line-height: 1.7;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-size: 16px;
+  margin: 0;
+}
+
+a {
+  color: var(--c-primary);
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--c-primary-dark);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--c-focus);
+}
+
+/* ---------------- 記事本文 ---------------- */
+.article-body {
+  font-size: 16px;
+  line-height: 1.9;
+  overflow-wrap: break-word;
+}
+
+.article-body > * + * {
+  margin-top: 1.25rem;
+}
+
+.article-body h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-top: 3rem;
+  padding: 0.375rem 0 0.375rem 0.75rem;
+  border-left: 6px solid var(--c-primary);
+  background: linear-gradient(to right, var(--c-bg-sub), transparent 85%);
+}
+
+.article-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-top: 2.25rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 2px solid var(--c-border);
+}
+
+.article-body h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+}
+
+.article-body ul,
+.article-body ol {
+  padding-left: 1.5em;
+}
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+.article-body li + li { margin-top: 0.375rem; }
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+}
+
+.article-body figure {
+  margin: 1.5rem 0;
+}
+.article-body figcaption {
+  font-size: 0.85rem;
+  color: var(--c-sub);
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+.article-body blockquote {
+  border-left: 4px solid var(--c-border);
+  padding: 0.25rem 0 0.25rem 1rem;
+  color: var(--c-sub);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 2.5rem 0;
+}
+
+.article-body table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+.article-body th,
+.article-body td {
+  border: 1px solid var(--c-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.article-body th {
+  background: var(--c-bg-sub);
+  font-weight: 700;
+}
+
+.article-body code:not(pre code) {
+  font-family: 'Noto Sans Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  background: var(--c-bg-sub);
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+}
+
+.article-body pre {
+  font-family: 'Noto Sans Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  background: #f6f8fa !important;
+}
+
+.article-body .code-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--c-ink);
+  border-radius: 6px 6px 0 0;
+  padding: 0.2rem 0.9rem;
+  margin-bottom: -1.25rem;
+}
+.article-body .code-label + pre {
+  border-top-left-radius: 0;
+  margin-top: 1.25rem;
+}
+
+/* ---------------- コールアウト ---------------- */
+.callout {
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-size: 0.95rem;
+}
+.callout > * + * { margin-top: 0.75rem; }
+
+.callout-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.callout-title::before {
+  content: '';
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: var(--callout-icon) no-repeat center / contain;
+  mask: var(--callout-icon) no-repeat center / contain;
+}
+
+.callout-memo {
+  background: var(--c-primary-bg);
+  border-color: var(--c-primary);
+}
+.callout-memo .callout-title {
+  color: var(--c-primary);
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 5h2v2h-2V7zm0 4h2v6h-2v-6z'/%3E%3C/svg%3E");
+}
+
+.callout-alert {
+  background: var(--c-warning-bg);
+  border-color: var(--c-warning-border);
+}
+.callout-alert .callout-title {
+  color: var(--c-warning-border);
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E");
+}
+
+.callout-box {
+  background: var(--c-bg);
+}
+.callout-box .callout-title::before {
+  display: none;
+}
+.callout-box .callout-title {
+  background: var(--c-bg-sub);
+  margin: -1rem -1.25rem 0.75rem;
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--c-border);
+  border-radius: 8px 8px 0 0;
+}
+
+/* ---------------- リンクカード ---------------- */
+.article-body a.linkcard {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+.article-body a.linkcard:hover {
+  border-color: var(--c-primary);
+  background: var(--c-primary-bg);
+}
+.linkcard-thumb {
+  flex-shrink: 0;
+  width: 120px;
+  display: flex;
+  align-items: center;
+}
+.linkcard-thumb img {
+  border: none;
+  border-radius: 4px;
+}
+.linkcard-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.linkcard-title {
+  font-weight: 700;
+  color: var(--c-primary);
+  line-height: 1.5;
+}
+.linkcard-site {
+  font-size: 0.85rem;
+  color: var(--c-sub);
+}
+.linkcard-url {
+  font-size: 0.8rem;
+  color: var(--c-sub);
+}
+.linkcard-url::before {
+  content: '🔗 ';
+}
+@media (max-width: 560px) {
+  .linkcard-thumb { display: none; }
+}
+
+/* ---------------- 目次 ---------------- */
+.toc {
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  background: var(--c-bg-sub);
+  font-size: 0.95rem;
+}
+.toc-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.toc ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.toc li {
+  padding: 0.2rem 0;
+}
+.toc li.toc-depth-3 {
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+}
+.toc a {
+  text-decoration: none;
+}
+.toc a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------- 広告 ---------------- */
+.ad-slot {
+  margin: 2rem 0;
+  text-align: center;
+  min-height: 1px;
+}
+
+/* ---------------- Pagefind 検索UI ---------------- */
+.search-wrap {
+  --pagefind-ui-primary: var(--c-primary);
+  --pagefind-ui-text: var(--c-ink);
+  --pagefind-ui-border: var(--c-border);
+  --pagefind-ui-border-radius: 8px;
+  --pagefind-ui-font: inherit;
+}

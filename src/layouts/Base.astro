@@ -1,0 +1,161 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+}
+
+const SITE_TITLE = 'テックろぐ';
+const SITE_DESCRIPTION =
+  '日々の気づき、パソコン・ネットワークのテクニックやトラブル解決の備忘録を書き留める技術ブログです。';
+const ADSENSE_CLIENT = 'ca-pub-9704812408336522';
+const GA4_ID = 'G-DVK9T8VYBR';
+
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  ogImage = '/wp-content/uploads/2023/04/cropped-3.png',
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageAbs = new URL(ogImage, Astro.site);
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/wp-content/uploads/2023/04/cropped-3-32x32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/wp-content/uploads/2023/04/cropped-3-180x180.png" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Mono:wght@400;700&display=swap"
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/* Google AdSense */}
+    <script
+      is:inline
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+      crossorigin="anonymous"></script>
+
+    {/* AdSense 広告ブロック回復メッセージ(AdSense管理画面での有効化が必要) */}
+    <script
+      is:inline
+      async
+      src="https://fundingchoicesmessages.google.com/i/pub-9704812408336522?ers=1"></script>
+    <script is:inline>
+      (function () {
+        function signalGooglefcPresent() {
+          if (!window.frames['googlefcPresent']) {
+            if (document.body) {
+              const iframe = document.createElement('iframe');
+              iframe.style =
+                'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;';
+              iframe.style.display = 'none';
+              iframe.name = 'googlefcPresent';
+              document.body.appendChild(iframe);
+            } else {
+              setTimeout(signalGooglefcPresent, 0);
+            }
+          }
+        }
+        signalGooglefcPresent();
+      })();
+    </script>
+
+    {/* Google Analytics (GA4) */}
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+    <script is:inline define:vars={{ GA4_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', GA4_ID);
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="border-b border-[var(--c-border)]">
+      <div class="h-1.5" style="background: var(--c-primary);"></div>
+      <div class="max-w-4xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+        <a href="/" class="no-underline flex items-center gap-3">
+          <img
+            src="/wp-content/uploads/2023/04/cropped-3-32x32.png"
+            alt=""
+            width="32"
+            height="32"
+            class="rounded"
+          />
+          <span class="text-2xl font-bold tracking-wide" style="color: var(--c-ink);"
+            >テックろぐ</span
+          >
+        </a>
+        <nav aria-label="メインナビゲーション">
+          <ul class="flex items-center gap-5 text-sm font-medium list-none m-0 p-0">
+            <li><a href="/" class="no-underline hover:underline">ホーム</a></li>
+            <li><a href="/categories/" class="no-underline hover:underline">カテゴリ</a></li>
+            <li>
+              <a href="/search/" class="no-underline hover:underline inline-flex items-center gap-1">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
+                検索
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-4xl mx-auto px-4 py-8">
+      <slot />
+    </main>
+
+    <footer class="border-t border-[var(--c-border)] mt-12" style="background: var(--c-bg-sub);">
+      <div class="max-w-4xl mx-auto px-4 py-8 text-sm" style="color: var(--c-sub);">
+        <nav aria-label="フッターナビゲーション">
+          <ul class="flex flex-wrap gap-x-6 gap-y-2 list-none m-0 p-0 mb-4">
+            <li><a href="/privacy-policy/">プライバシーポリシー</a></li>
+            <li><a href="/info/">メンテナンス・障害情報</a></li>
+            <li><a href="/logo-guidelines/">ロゴ使用ガイドライン</a></li>
+            <li><a href="/rss.xml">RSS</a></li>
+          </ul>
+        </nav>
+        <p class="m-0">
+          本サイトは個人が運営する技術ブログです。デザインは<a
+            href="https://design.digital.go.jp/"
+            target="_blank"
+            rel="noopener noreferrer">デジタル庁デザインシステム</a
+          >を参考にしていますが、デジタル庁および政府機関とは一切関係ありません。
+        </p>
+        <p class="m-0 mt-3">&copy; {new Date().getFullYear()} テックろぐ</p>
+      </div>
+    </footer>
+  </body>
+</html>

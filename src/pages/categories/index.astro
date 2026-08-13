@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+const counts = new Map<string, number>();
+for (const p of posts) {
+  for (const c of p.data.categories) {
+    counts.set(c, (counts.get(c) ?? 0) + 1);
+  }
+}
+const categories = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<Base title="カテゴリ一覧" description="テックろぐの記事カテゴリ一覧です。">
+  <h1 class="text-xl font-bold mb-4 pb-2 border-b-2" style="border-color: var(--c-primary);">
+    カテゴリ一覧
+  </h1>
+  <ul class="grid sm:grid-cols-2 gap-3 list-none m-0 p-0">
+    {
+      categories.map(([name, count]) => (
+        <li>
+          <a
+            href={`/category/${name}/`}
+            class="no-underline flex items-center justify-between border rounded-lg px-4 py-3 hover:underline"
+            style="border-color: var(--c-border);"
+          >
+            <span class="font-medium" style="color: var(--c-primary);">
+              {name}
+            </span>
+            <span class="text-sm" style="color: var(--c-sub);">
+              {count}件
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

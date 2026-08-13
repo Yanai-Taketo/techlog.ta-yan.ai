@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://techlog.ta-yan.ai/sitemap-index.xml

@@ -1,0 +1,37 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import PostCard from '../../../../components/PostCard.astro';
+import Pagination from '../../../../components/Pagination.astro';
+import { getPublishedPosts, POSTS_PER_PAGE } from '../../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const categories = [...new Set(posts.flatMap((p) => p.data.categories))];
+  const paths = [];
+  for (const category of categories) {
+    const count = posts.filter((p) => p.data.categories.includes(category)).length;
+    const totalPages = Math.ceil(count / POSTS_PER_PAGE);
+    for (let n = 2; n <= totalPages; n++) {
+      paths.push({ params: { category, num: String(n) } });
+    }
+  }
+  return paths;
+}
+
+const { category, num } = Astro.params;
+const current = Number(num);
+const all = (await getPublishedPosts()).filter((p) => p.data.categories.includes(category));
+const totalPages = Math.ceil(all.length / POSTS_PER_PAGE);
+const pagePosts = all.slice((current - 1) * POSTS_PER_PAGE, current * POSTS_PER_PAGE);
+---
+
+<Base title={`カテゴリ: ${category} (${current}ページ目)`}>
+  <h1 class="text-xl font-bold mb-2 pb-2 border-b-2" style="border-color: var(--c-primary);">
+    カテゴリ: {category}
+    <span class="text-sm font-normal">({current} / {totalPages} ページ)</span>
+  </h1>
+  <div>
+    {pagePosts.map((post) => <PostCard post={post} />)}
+  </div>
+  <Pagination current={current} total={totalPages} basePath={`/category/${category}/`} />
+</Base>

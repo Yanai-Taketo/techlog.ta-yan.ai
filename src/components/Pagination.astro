@@ -1,0 +1,54 @@
+---
+interface Props {
+  current: number;
+  total: number;
+  basePath: string; // 例 '/'、'/category/備忘録/'
+}
+const { current, total, basePath } = Astro.props;
+const pageUrl = (n: number) => (n === 1 ? basePath : `${basePath}page/${n}/`);
+const pages = Array.from({ length: total }, (_, i) => i + 1);
+---
+
+{
+  total > 1 && (
+    <nav aria-label="ページ送り" class="mt-8">
+      <ul class="flex flex-wrap items-center justify-center gap-2 list-none m-0 p-0">
+        {current > 1 && (
+          <li>
+            <a href={pageUrl(current - 1)} class="no-underline px-3 py-1.5 rounded border inline-block text-sm" style="border-color: var(--c-border);">
+              前へ
+            </a>
+          </li>
+        )}
+        {pages.map((n) => (
+          <li>
+            {n === current ? (
+              <span
+                class="px-3 py-1.5 rounded border inline-block text-sm font-bold text-white"
+                style="background: var(--c-primary); border-color: var(--c-primary);"
+                aria-current="page"
+              >
+                {n}
+              </span>
+            ) : (
+              <a
+                href={pageUrl(n)}
+                class="no-underline px-3 py-1.5 rounded border inline-block text-sm"
+                style="border-color: var(--c-border);"
+              >
+                {n}
+              </a>
+            )}
+          </li>
+        ))}
+        {current < total && (
+          <li>
+            <a href={pageUrl(current + 1)} class="no-underline px-3 py-1.5 rounded border inline-block text-sm" style="border-color: var(--c-border);">
+              次へ
+            </a>
+          </li>
+        )}
+      </ul>
+    </nav>
+  )
+}

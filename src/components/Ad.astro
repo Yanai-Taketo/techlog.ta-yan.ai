@@ -1,0 +1,27 @@
+---
+/**
+ * Google AdSense 広告ユニット。
+ * slot は AdSense 管理画面の広告ユニットID(旧サイトから引き継ぎ)。
+ */
+interface Props {
+  slot: string;
+  layout?: string;
+  format?: string;
+}
+const { slot, layout, format = 'auto' } = Astro.props;
+const ADSENSE_CLIENT = 'ca-pub-9704812408336522';
+---
+
+<div class="ad-slot">
+  <ins
+    class="adsbygoogle"
+    style="display:block"
+    data-ad-client={ADSENSE_CLIENT}
+    data-ad-slot={slot}
+    data-ad-format={format}
+    data-ad-layout={layout}
+    data-full-width-responsive="true"></ins>
+  <script is:inline>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>

@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="ページが見つかりません" noindex={true}>
+  <div class="text-center py-16">
+    <p class="text-6xl font-bold m-0" style="color: var(--c-primary);">404</p>
+    <h1 class="text-xl font-bold mt-4">お探しのページが見つかりませんでした</h1>
+    <p class="mt-2" style="color: var(--c-sub);">
+      ページが移動または削除されたか、URLが間違っている可能性があります。
+    </p>
+    <div class="mt-8 flex justify-center gap-4">
+      <a
+        href="/"
+        class="no-underline inline-block rounded-lg px-6 py-2.5 font-medium text-white"
+        style="background: var(--c-primary);">トップページへ</a
+      >
+      <a
+        href="/search/"
+        class="no-underline inline-block rounded-lg px-6 py-2.5 font-medium border"
+        style="border-color: var(--c-primary); color: var(--c-primary);">記事を検索する</a
+      >
+    </div>
+  </div>
+</Base>
