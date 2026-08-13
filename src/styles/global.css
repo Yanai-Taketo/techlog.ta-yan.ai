@@ -35,6 +35,8 @@ body {
 
 a {
   color: var(--c-primary);
+  /* 色だけに頼らずリンクを識別できるよう下線を標準表示(アクセシビリティ/DADS準拠) */
+  text-decoration: underline;
   text-underline-offset: 3px;
 }
 a:hover {
