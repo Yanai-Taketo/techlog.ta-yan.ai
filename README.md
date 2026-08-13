@@ -35,7 +35,10 @@ WordPress(さくらのレンタルサーバ + SANGOテーマ)から移行した�
 
 ## 記事の書き方
 
-`src/content/blog/` に Markdown ファイルを置くだけで記事になります。**ファイル名(拡張子を除く)がそのままURL**になります(例: `my-new-post.md` → `https://techlog.ta-yan.ai/my-new-post/`)。
+記事の編集方法は2通りあります。
+
+1. **ブラウザで編集(CMS)**: `https://techlog.ta-yan.ai/admin/` にアクセスし、GitHubアカウントでログインします([Sveltia CMS](https://github.com/sveltia/sveltia-cms)・日本語UI対応)。記事の作成・編集・画像アップロードがWordPressの管理画面に近い感覚で行え、保存するとGitHubへコミット→自動デプロイされます。初回セットアップは「[CMSのセットアップ](#cmsのセットアップ)」を参照
+2. **Markdownを直接編集**: `src/content/blog/` に Markdown ファイルを置くだけで記事になります。**ファイル名(拡張子を除く)がそのままURL**になります(例: `my-new-post.md` → `https://techlog.ta-yan.ai/my-new-post/`)。
 
 > 旧WordPress記事は互換性のため `20260610` + 記事ID という旧URL形式のファイル名になっています。新しい記事は自由な英数字スラッグで構いません。
 
@@ -89,6 +92,22 @@ npm run build    # dist/ に本番ビルド+検索インデックス生成
 npm run preview  # ビルド結果の確認
 ```
 
+## CMSのセットアップ
+
+CMS本体(`/admin/`)はサイトに同梱済みです。GitHubログインの認証中継用に、小さなWorkerを一度だけデプロイする必要があります。
+
+1. **認証Workerのデプロイ**: [sveltia/sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) の「Deploy to Cloudflare Workers」ボタンから自分のCloudflareアカウントへデプロイし、Worker URL(例: `https://sveltia-cms-auth.xxxx.workers.dev`)を控える
+2. **GitHub OAuth Appの作成**: GitHub → Settings → Developer settings → [OAuth Apps](https://github.com/settings/applications/new) → New OAuth App
+   - Application name: `Sveltia CMS Authenticator`(任意)
+   - Homepage URL: `https://techlog.ta-yan.ai`
+   - Authorization callback URL: `<Worker URL>/callback`
+   - 作成後に Client ID を控え、「Generate a new client secret」で Client Secret を発行
+3. **Workerに環境変数を設定**: Cloudflareダッシュボード → 該当Worker → Settings → Variables
+   - `GITHUB_CLIENT_ID`: 上記Client ID
+   - `GITHUB_CLIENT_SECRET`: 上記Client Secret(「暗号化」を選択)
+   - `ALLOWED_DOMAINS`: `techlog.ta-yan.ai`(プレビューでも使う場合はカンマ区切りで追加)
+4. **config.ymlの更新**: `public/admin/config.yml` の `base_url:` を手順1のWorker URLに書き換えてコミット
+
 ## デプロイ(Cloudflare)
 
 GitHub連携で main ブランチへのプッシュのたびに自動デプロイされる構成を想定しています。
@@ -128,4 +147,4 @@ GitHub連携で main ブランチへのプッシュのたびに自動デプロ�
 
 - [ ] プライバシーポリシー(`src/pages/privacy-policy.astro`)の文面を確認・必要に応じて修正(旧サイトでは下書きのままだったため新規作成)
 - [ ] AdSense「広告ブロック回復メッセージ」をAdSense管理画面で作成・有効化(旧サイトの有料プラグインの代替。不要ならBase.astroの該当スクリプトを削除)
-- [ ] 記事執筆をブラウザで行いたい場合は [Pages CMS](https://pagescms.org/) 等の導入を検討
+- [ ] CMSの認証Workerセットアップ(上記「CMSのセットアップ」の手順1〜4)

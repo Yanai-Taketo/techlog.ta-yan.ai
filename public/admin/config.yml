@@ -1,0 +1,101 @@
+# Sveltia CMS 設定
+# https://github.com/sveltia/sveltia-cms
+backend:
+  name: github
+  repo: Yanai-Taketo/techlog.ta-yan.ai
+  # branch を省略するとリポジトリのデフォルトブランチを使用します
+  # ↓ sveltia-cms-auth Worker をデプロイしたらURLに書き換えてください
+  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev
+
+site_url: https://techlog.ta-yan.ai
+display_url: https://techlog.ta-yan.ai
+
+# CMSからアップロードした画像の保存先
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+slug:
+  encoding: unicode
+  clean_accents: false
+
+collections:
+  - name: blog
+    label: 記事
+    label_singular: 記事
+    folder: src/content/blog
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    identifier_field: title
+    summary: '{{title}} ({{pubDate}})'
+    sortable_fields: [pubDate, title]
+    view_filters:
+      - label: 下書き
+        field: draft
+        pattern: true
+    fields:
+      - name: title
+        label: タイトル
+        widget: string
+      - name: description
+        label: 説明文(検索結果・OGP用)
+        widget: text
+        required: false
+      - name: pubDate
+        label: 公開日時
+        widget: datetime
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+      - name: updatedDate
+        label: 更新日時
+        widget: datetime
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        required: false
+      - name: categories
+        label: カテゴリ
+        widget: select
+        multiple: true
+        options: [備忘録, テクニック, ニュース, テクノロジー, 雑談]
+      - name: image
+        label: アイキャッチ画像
+        widget: image
+        required: false
+      - name: draft
+        label: 下書き(非公開)
+        widget: boolean
+        default: false
+        required: false
+      - name: wpId
+        label: 旧WordPress記事ID
+        widget: number
+        required: false
+      - name: body
+        label: 本文
+        widget: markdown
+
+  - name: pages
+    label: 固定ページ
+    files:
+      - name: info
+        label: メンテナンス・障害情報
+        file: src/content/pages/info.md
+        fields: &page_fields
+          - name: title
+            label: タイトル
+            widget: string
+          - name: description
+            label: 説明文
+            widget: text
+            required: false
+          - name: pubDate
+            label: 公開日時
+            widget: datetime
+            format: 'YYYY-MM-DDTHH:mm:ssZ'
+            required: false
+          - name: body
+            label: 本文
+            widget: markdown
+      - name: logo-guidelines
+        label: ロゴ使用ガイドライン
+        file: src/content/pages/logo-guidelines.md
+        fields: *page_fields
