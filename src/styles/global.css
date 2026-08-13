@@ -316,9 +316,27 @@ a:hover {
 
 /* ---------------- 広告 ---------------- */
 .ad-slot {
-  margin: 2rem 0;
+  margin: 2.5rem 0;
   text-align: center;
   min-height: 1px;
+}
+.ad-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--c-sub);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+/* ---------------- アフィリエイト表記 ---------------- */
+.affiliate-note {
+  font-size: 0.85rem;
+  color: var(--c-sub);
+  background: var(--c-bg-sub);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0 0;
 }
 
 /* ---------------- Pagefind 検索UI ---------------- */

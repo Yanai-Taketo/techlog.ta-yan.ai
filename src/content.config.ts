@@ -12,6 +12,7 @@ const blog = defineCollection({
     image: z.string().optional(),
     wpId: z.number().optional(),
     draft: z.boolean().default(false),
+    affiliate: z.boolean().default(false),
   }),
 });
 

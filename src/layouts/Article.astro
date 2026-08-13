@@ -17,6 +17,7 @@ interface Props {
   categories?: string[];
   image?: string;
   headings?: Heading[];
+  affiliate?: boolean;
   prev?: { id: string; title: string } | null;
   next?: { id: string; title: string } | null;
 }
@@ -29,12 +30,26 @@ const {
   categories = [],
   image,
   headings = [],
+  affiliate = false,
   prev = null,
   next = null,
 } = Astro.props;
 
 const fmt = (d: Date) => `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  ...(image ? { image: new URL(image, Astro.site).toString() } : {}),
+  author: { '@type': 'Person', name: 'テックろぐ' },
+  publisher: { '@type': 'Organization', name: 'テックろぐ' },
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).toString(),
+});
 ---
 
 <Base title={title} description={description} ogImage={image} ogType="article">
@@ -67,7 +82,15 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
           {categories.map((c) => <CategoryChip name={c} />)}
         </span>
       </div>
+      {
+        affiliate && (
+          <p class="affiliate-note" data-pagefind-ignore>
+            本記事にはアフィリエイト広告(Amazonアソシエイト)が含まれています。
+          </p>
+        )
+      }
     </header>
+    <script type="application/ld+json" set:html={jsonLd} />
 
     <div data-pagefind-ignore>
       <Ad slot="1243417992" />
