@@ -4,8 +4,7 @@ backend:
   name: github
   repo: Yanai-Taketo/techlog.ta-yan.ai
   # branch を省略するとリポジトリのデフォルトブランチを使用します
-  # ↓ sveltia-cms-auth Worker をデプロイしたらURLに書き換えてください
-  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev
+  base_url: https://sveltia-cms-auth.icy-grass-2df6.workers.dev
 
 site_url: https://techlog.ta-yan.ai
 display_url: https://techlog.ta-yan.ai
