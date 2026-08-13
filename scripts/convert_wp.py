@@ -411,6 +411,20 @@ def tidy(md):
     md = re.sub(r'\n{3,}', '\n\n', md)
     return md.strip() + '\n'
 
+
+EMPTY_BOX_MEMO = re.compile(
+    r'^(:{4,})box\n(:{3})memo(\{[^}]*\})?\n+\2\n+(.*?)\n\1\n', re.M | re.S)
+EMPTY_SOLO_MEMO = re.compile(r'^(:{3,})memo\{title="([^"]*)"\}\n+\1\n', re.M)
+
+def fix_empty_directives(md):
+    """SANGO由来の「空のタイトル付きボックス+後続本文」パターンを正規化する。
+    旧テーマでは外枠ボックスで視覚的に一体化していたが、変換後は分離して見えるため、
+    後続の本文をmemoの中に取り込む(単独の空memoはタイトルを太字ラベル化)。"""
+    md = EMPTY_BOX_MEMO.sub(
+        lambda m: f':::memo{m.group(3) or ""}\n{m.group(4).strip()}\n:::\n', md)
+    md = EMPTY_SOLO_MEMO.sub(lambda m: f'**{m.group(2)}**\n', md)
+    return md
+
 def convert_content(content):
     sanko_tokens.clear()
     content = preprocess(content)
@@ -424,6 +438,7 @@ def convert_content(content):
     md = shortcodes(md)
     for token, directive in sanko_tokens.items():
         md = md.replace(token, directive)
+    md = fix_empty_directives(md)
     return tidy(md)
 
 def first_paragraph_text(md, limit=120):
