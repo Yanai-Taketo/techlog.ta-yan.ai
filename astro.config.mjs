@@ -13,6 +13,8 @@ export default defineConfig({
   },
   integrations: [sitemap()],
   markdown: {
+    // 記号の自動変換(-- → ダッシュ、' → 曲線引用符)は技術記事のコマンド表記を壊すため無効化
+    smartypants: false,
     remarkPlugins: [remarkDirective, remarkCallouts],
     shikiConfig: {
       theme: 'github-light',

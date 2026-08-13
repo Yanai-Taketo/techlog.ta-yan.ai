@@ -6,9 +6,11 @@ import { visit } from 'unist-util-visit';
  *   :::memo{title="MEMO"} …… 補足(青)      :::alert{title="注意"} …… 注意(黄)
  *   :::box{title="..."}   …… 汎用ボックス   ::linkcard[タイトル]{url="…" site="…" image="…"}
  */
+const KNOWN = ['memo', 'alert', 'box', 'linkcard'];
+
 export function remarkCallouts() {
   return (tree) => {
-    visit(tree, (node) => {
+    visit(tree, (node, index, parent) => {
       if (
         node.type !== 'containerDirective' &&
         node.type !== 'leafDirective' &&
@@ -16,6 +18,18 @@ export function remarkCallouts() {
       ) {
         return;
       }
+
+      // 未定義のディレクティブは文字どおりのテキストに戻す
+      // (本文中の「localhost:5000」の「:5000」等がディレクティブとして
+      //  誤解釈されリンクや段落が壊れるのを防ぐ)
+      if (!KNOWN.includes(node.name)) {
+        if (parent && typeof index === 'number') {
+          const literal = { type: 'text', value: `:${node.name}` };
+          parent.children.splice(index, 1, literal, ...(node.children || []));
+        }
+        return;
+      }
+
       const data = node.data || (node.data = {});
       const attrs = node.attributes || {};
 

@@ -300,7 +300,23 @@ def convert_block(el, ctx):
         inner = convert_children(el, ctx)
         return wrap_directive('box', '', inner)
     if 'wp-block-sgb-sanko' in cls:
-        return None  # handled from block comment attrs (pre-extracted); fallback below
+        # 通常は block コメントのJSON属性から事前抽出済み。ここに来るのは
+        # wp:html ブロック内に生HTMLで貼られた旧形式のカード。
+        a = el.find('a')
+        if a is None:
+            return None
+        url = a.get('href', '')
+        cite = el.find(class_='refcite')
+        site = ''
+        title = url
+        if cite:
+            inner = cite.find('span')
+            site = inner.get_text().strip() if inner else ''
+            if inner:
+                inner.extract()
+            title = cite.get_text().strip() or url
+        site_attr = f' site="{esc_attr(site)}"' if site else ''
+        return f'::linkcard[{dir_label(title)}]{{url="{url}"{site_attr}}}'
     if 'wp-block-sgb-list' in cls:
         lst = el.find(['ul', 'ol'])
         return '\n'.join(convert_list(lst)) if lst else None
