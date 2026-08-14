@@ -20,33 +20,37 @@
   --c-focus: #fbf500;          /* フォーカスイエロー */
 }
 
-html {
-  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-  color: var(--c-ink);
-  background: var(--c-bg);
-  line-height: 1.7;
-  -webkit-text-size-adjust: 100%;
-}
+/* 要素セレクタは base レイヤーに置き、Tailwindユーティリティ
+   (text-white / no-underline 等)で上書きできるようにする */
+@layer base {
+  html {
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    color: var(--c-ink);
+    background: var(--c-bg);
+    line-height: 1.7;
+    -webkit-text-size-adjust: 100%;
+  }
 
-body {
-  font-size: 16px;
-  margin: 0;
-}
+  body {
+    font-size: 16px;
+    margin: 0;
+  }
 
-a {
-  color: var(--c-primary);
-  /* 色だけに頼らずリンクを識別できるよう下線を標準表示(アクセシビリティ/DADS準拠) */
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-a:hover {
-  color: var(--c-primary-dark);
-}
+  a {
+    color: var(--c-primary);
+    /* 色だけに頼らずリンクを識別できるよう下線を標準表示(アクセシビリティ/DADS準拠) */
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  a:hover {
+    color: var(--c-primary-dark);
+  }
 
-:focus-visible {
-  outline: 2px solid var(--c-ink);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 6px var(--c-focus);
+  :focus-visible {
+    outline: 2px solid var(--c-ink);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--c-focus);
+  }
 }
 
 /* ---------------- 記事本文 ---------------- */
