@@ -73,8 +73,18 @@ function findInsertIndex(blocks) {
   if (upper <= lower) return -1;
 
   const mid = Math.floor(blocks.length / 2);
-  // 直前が画像を含むブロックの位置は避ける(広告が画像の説明と誤認されるのを防ぐ)
-  const usable = (i) => i > lower - 1 && i < upper && !containsImage(blocks[i - 1]);
+  const HEADINGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+  // 挿入位置 i は「blocks[i] の直前」を意味する。直前ブロックが
+  //  - 画像を含む  … 広告が画像の説明と誤認される
+  //  - 見出し      … その見出しが広告のラベルとして誤解される(ポリシー違反)
+  // のいずれかなら避ける。どちらも満たせない記事には挿入しない。
+  const usable = (i) => {
+    if (i <= lower - 1 || i >= upper) return false;
+    const prev = blocks[i - 1];
+    if (!prev) return false;
+    if (HEADINGS.includes(prev.tagName)) return false;
+    return !containsImage(prev);
+  };
 
   // 1) 中盤の見出し(h2)の直前。画像の直後になる見出しは候補から外す
   const headings = [];
