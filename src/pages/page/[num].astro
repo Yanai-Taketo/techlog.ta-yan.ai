@@ -27,6 +27,6 @@ const pagePosts = posts.slice((current - 1) * POSTS_PER_PAGE, current * POSTS_PE
   <div>
     {pagePosts.map((post) => <PostCard post={post} />)}
   </div>
-  <Ad slot="4159024247" />
+  <Ad unit="4159024247" />
   <Pagination current={current} total={totalPages} basePath="/" />
 </Base>

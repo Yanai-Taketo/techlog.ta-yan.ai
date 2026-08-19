@@ -1,14 +1,16 @@
 ---
 /**
  * Google AdSense 広告ユニット。
- * slot は AdSense 管理画面の広告ユニットID(旧サイトから引き継ぎ)。
+ * unit は AdSense 管理画面の広告ユニットID(旧サイトから引き継ぎ)。
+ * ※ prop名に `slot` は使えない。Astroの予約属性(名前付きスロット指定)と衝突し、
+ *   コンポーネント直下に置いた場合に警告なく破棄されるため。
  */
 interface Props {
-  slot: string;
+  unit: string;
   layout?: string;
   format?: string;
 }
-const { slot, layout, format = 'auto' } = Astro.props;
+const { unit, layout, format = 'auto' } = Astro.props;
 const ADSENSE_CLIENT = 'ca-pub-9704812408336522';
 // fluid(In-article等のネイティブ広告)は幅が親要素に追従するため
 // full-width-responsive を付けない
@@ -21,7 +23,7 @@ const isFluid = format === 'fluid';
     class="adsbygoogle"
     style={isFluid ? 'display:block; text-align:center;' : 'display:block'}
     data-ad-client={ADSENSE_CLIENT}
-    data-ad-slot={slot}
+    data-ad-slot={unit}
     data-ad-format={format}
     data-ad-layout={layout}
     data-full-width-responsive={isFluid ? undefined : 'true'}></ins>

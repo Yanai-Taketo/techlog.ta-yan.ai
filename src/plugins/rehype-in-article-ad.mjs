@@ -57,6 +57,13 @@ function adNode() {
   };
 }
 
+/** そのノード配下に画像が含まれるか(Markdownの画像は <p><img></p> になるため要再帰探索) */
+function containsImage(node) {
+  if (!node) return false;
+  if (node.tagName === 'img') return true;
+  return (node.children || []).some((c) => c.type === 'element' && containsImage(c));
+}
+
 /** 広告を差し込むインデックスを決める。挿入しない場合は -1 */
 function findInsertIndex(blocks) {
   if (blocks.length < MIN_BLOCKS) return -1;
@@ -66,22 +73,22 @@ function findInsertIndex(blocks) {
   if (upper <= lower) return -1;
 
   const mid = Math.floor(blocks.length / 2);
+  // 直前が画像を含むブロックの位置は避ける(広告が画像の説明と誤認されるのを防ぐ)
+  const usable = (i) => i > lower - 1 && i < upper && !containsImage(blocks[i - 1]);
 
-  // 1) 中盤の見出し(h2)の直前
-  let best = -1;
+  // 1) 中盤の見出し(h2)の直前。画像の直後になる見出しは候補から外す
+  const headings = [];
   for (let i = lower; i < upper; i++) {
-    if (blocks[i].tagName !== 'h2') continue;
-    if (best === -1 || Math.abs(i - mid) < Math.abs(best - mid)) best = i;
+    if (blocks[i].tagName === 'h2' && usable(i)) headings.push(i);
   }
-  if (best !== -1) return best;
+  if (headings.length) {
+    return headings.reduce((a, b) => (Math.abs(b - mid) < Math.abs(a - mid) ? b : a));
+  }
 
-  // 2) 見出しが無ければ中盤のブロック境界。ただし画像の直後は避ける
+  // 2) 見出しが無ければ中盤のブロック境界
   for (let d = 0; d < blocks.length; d++) {
     for (const i of [mid - d, mid + d]) {
-      if (i < lower || i >= upper) continue;
-      const prev = blocks[i - 1];
-      if (prev && (prev.tagName === 'figure' || prev.tagName === 'img')) continue;
-      return i;
+      if (usable(i)) return i;
     }
   }
   return -1;
