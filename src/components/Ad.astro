@@ -10,18 +10,21 @@ interface Props {
 }
 const { slot, layout, format = 'auto' } = Astro.props;
 const ADSENSE_CLIENT = 'ca-pub-9704812408336522';
+// fluid(In-article等のネイティブ広告)は幅が親要素に追従するため
+// full-width-responsive を付けない
+const isFluid = format === 'fluid';
 ---
 
 <div class="ad-slot">
   <span class="ad-label">スポンサーリンク</span>
   <ins
     class="adsbygoogle"
-    style="display:block"
+    style={isFluid ? 'display:block; text-align:center;' : 'display:block'}
     data-ad-client={ADSENSE_CLIENT}
     data-ad-slot={slot}
     data-ad-format={format}
     data-ad-layout={layout}
-    data-full-width-responsive="true"></ins>
+    data-full-width-responsive={isFluid ? undefined : 'true'}></ins>
   <script is:inline>
     (adsbygoogle = window.adsbygoogle || []).push({});
   </script>

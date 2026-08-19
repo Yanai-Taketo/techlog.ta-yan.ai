@@ -334,6 +334,13 @@
   margin-bottom: 0.25rem;
 }
 
+/* 記事本文中の広告は、本文と混同されないよう上下に余白と区切り線を置く */
+.ad-slot-in-article {
+  margin: 3rem 0;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--c-border);
+}
+
 /* ---------------- アフィリエイト表記 ---------------- */
 .affiliate-note {
   font-size: 0.85rem;
