@@ -5,18 +5,37 @@ import { getPublishedPosts } from '../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts(); // 新しい順
-  return posts.map((post, i) => ({
-    params: { slug: post.id },
-    props: {
-      post,
-      // posts は新しい順: i+1 が過去(前の記事)、i-1 が未来(次の記事)
-      prev: i + 1 < posts.length ? { id: posts[i + 1].id, title: posts[i + 1].data.title } : null,
-      next: i > 0 ? { id: posts[i - 1].id, title: posts[i - 1].data.title } : null,
-    },
-  }));
+  const byId = new Map(posts.map((p) => [p.id, p]));
+
+  return posts.map((post, i) => {
+    // frontmatter の related を実際の記事へ解決(存在しないIDは無視)
+    const relatedPosts = (post.data.related ?? [])
+      .filter((id) => id !== post.id)
+      .map((id) => byId.get(id))
+      .filter(Boolean)
+      .map((p) => ({
+        id: p.id,
+        title: p.data.title,
+        description: p.data.description,
+        image: p.data.image,
+      }));
+    const relatedIds = new Set(relatedPosts.map((p) => p.id));
+
+    // posts は新しい順: i+1 が過去(前の記事)、i-1 が未来(次の記事)
+    const prevPost = i + 1 < posts.length ? posts[i + 1] : null;
+    const nextPost = i > 0 ? posts[i - 1] : null;
+    // 関連記事として既に出しているものは前後ナビから省く(同じリンクの二重表示を避ける)
+    const asNav = (p) =>
+      p && !relatedIds.has(p.id) ? { id: p.id, title: p.data.title } : null;
+
+    return {
+      params: { slug: post.id },
+      props: { post, relatedPosts, prev: asNav(prevPost), next: asNav(nextPost) },
+    };
+  });
 }
 
-const { post, prev, next } = Astro.props;
+const { post, relatedPosts, prev, next } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
@@ -29,6 +48,7 @@ const { Content, headings } = await render(post);
   image={post.data.image}
   headings={headings}
   affiliate={post.data.affiliate}
+  relatedPosts={relatedPosts}
   prev={prev}
   next={next}
 >

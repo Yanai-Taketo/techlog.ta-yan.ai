@@ -64,6 +64,16 @@ collections:
         widget: boolean
         default: false
         required: false
+      - name: related
+        label: 関連記事
+        hint: 記事末尾に「関連記事」として表示されます。未指定なら「前後の記事」が表示されます
+        widget: relation
+        collection: blog
+        search_fields: [title]
+        value_field: '{{slug}}'
+        display_fields: [title]
+        multiple: true
+        required: false
       - name: wpId
         label: 旧WordPress記事ID
         widget: number

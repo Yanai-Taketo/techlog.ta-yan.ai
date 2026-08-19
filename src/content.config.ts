@@ -13,6 +13,9 @@ const blog = defineCollection({
     wpId: z.number().optional(),
     draft: z.boolean().default(false),
     affiliate: z.boolean().default(false),
+    // 関連記事(手動指定)。他の記事のファイル名(拡張子なし)を並べる。
+    // 未指定なら「前後の記事」ナビだけが表示される
+    related: z.array(z.string()).default([]),
   }),
 });
 

@@ -2,11 +2,19 @@
 import Base from './Base.astro';
 import Ad from '../components/Ad.astro';
 import CategoryChip from '../components/CategoryChip.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
 
 interface Heading {
   depth: number;
   slug: string;
   text: string;
+}
+
+interface RelatedPost {
+  id: string;
+  title: string;
+  description?: string;
+  image?: string;
 }
 
 interface Props {
@@ -18,6 +26,7 @@ interface Props {
   image?: string;
   headings?: Heading[];
   affiliate?: boolean;
+  relatedPosts?: RelatedPost[];
   prev?: { id: string; title: string } | null;
   next?: { id: string; title: string } | null;
 }
@@ -31,6 +40,7 @@ const {
   image,
   headings = [],
   affiliate = false,
+  relatedPosts = [],
   prev = null,
   next = null,
 } = Astro.props;
@@ -119,6 +129,8 @@ const jsonLd = JSON.stringify({
       <Ad unit="8126189415" />
     </div>
   </article>
+
+  <RelatedPosts posts={relatedPosts} />
 
   {
     (prev || next) && (

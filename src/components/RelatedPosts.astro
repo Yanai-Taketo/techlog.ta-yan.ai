@@ -1,0 +1,52 @@
+---
+interface RelatedPost {
+  id: string;
+  title: string;
+  description?: string;
+  image?: string;
+}
+interface Props {
+  posts: RelatedPost[];
+}
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="mt-12" aria-labelledby="related-heading">
+      <h2
+        id="related-heading"
+        class="text-lg font-bold mb-3 pb-2 border-b-2"
+        style="border-color: var(--c-primary);"
+      >
+        関連記事
+      </h2>
+      <ul class="list-none m-0 p-0 grid gap-3 sm:grid-cols-2">
+        {posts.map((p) => (
+          <li>
+            <a
+              href={`/${p.id}/`}
+              class="no-underline flex gap-3 items-center border rounded-lg p-3 h-full hover:underline"
+              style="border-color: var(--c-border);"
+            >
+              {p.image && (
+                <img
+                  src={p.image}
+                  alt=""
+                  width="80"
+                  height="45"
+                  loading="lazy"
+                  class="flex-shrink-0 w-20 h-12 object-cover rounded border"
+                  style="border-color: var(--c-border);"
+                />
+              )}
+              <span class="text-sm font-medium leading-snug" style="color: var(--c-ink);">
+                {p.title}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
