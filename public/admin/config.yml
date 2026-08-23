@@ -64,6 +64,12 @@ collections:
         widget: boolean
         default: false
         required: false
+      - name: affiliate
+        label: アフィリエイト広告を含む
+        hint: Amazonアソシエイト等の広告リンクを貼った記事は必ずONにしてください(記事冒頭に法令上必要な表記が自動で入ります)
+        widget: boolean
+        default: false
+        required: false
       - name: related
         label: 関連記事
         hint: 記事末尾に「関連記事」として表示されます。未指定なら「前後の記事」が表示されます
