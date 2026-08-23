@@ -49,3 +49,5 @@
 /sitemap.xml /sitemap-index.xml 301
 # --- 旧固定ページ ---
 /sample-page/ / 301
+# --- CMSの自動生成URL(日本語)から記事ID形式へ ---
+/%E5%80%8B%E4%BA%BA%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%92%E3%81%95%E3%81%8F%E3%82%89--cloudflare-email-routing--fastmail%E3%81%AB%E7%A7%BB%E8%A1%8C%E3%81%97%E3%81%9F%E8%A9%B1/ /202608232318/ 301

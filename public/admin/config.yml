@@ -16,6 +16,8 @@ public_folder: /images/uploads
 slug:
   encoding: unicode
   clean_accents: false
+  # 既定は UTC。JSTの朝9時前に書いた記事が前日の日付になるのを防ぐ
+  timezone: local
 
 collections:
   - name: blog
@@ -25,7 +27,9 @@ collections:
     create: true
     extension: md
     format: yaml-frontmatter
-    slug: '{{slug}}'
+    # 旧WordPressのURL(例 202606101107 = 日付8桁 + 記事ID)と同じ12桁の数字を自動採番する。
+    # 内訳は 年4+月2+日2+時2+分2。タイトルに依存しないので日本語URLにならない
+    slug: '{{year}}{{month}}{{day}}{{hour}}{{minute}}'
     identifier_field: title
     summary: '{{title}} ({{pubDate}})'
     sortable_fields: [pubDate, title]
