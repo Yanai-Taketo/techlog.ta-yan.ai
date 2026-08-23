@@ -27,9 +27,9 @@ collections:
     create: true
     extension: md
     format: yaml-frontmatter
-    # 旧WordPressのURL(例 202606101107 = 日付8桁 + 記事ID)と同じ12桁の数字を自動採番する。
-    # 内訳は 年4+月2+日2+時2+分2。タイトルに依存しないので日本語URLにならない
-    slug: '{{year}}{{month}}{{day}}{{hour}}{{minute}}'
+    # URLは旧WordPressと同じ「日付8桁 + 記事番号」。記事番号は wpId フィールドの手入力。
+    # 日付は保存時のもの(タイムゾーンは下の slug.timezone: local に従う)
+    slug: '{{year}}{{month}}{{day}}{{fields.wpId}}'
     identifier_field: title
     summary: '{{title}} ({{pubDate}})'
     sortable_fields: [pubDate, title]
@@ -85,9 +85,12 @@ collections:
         multiple: true
         required: false
       - name: wpId
-        label: 旧WordPress記事ID
+        label: 記事番号
+        hint: URLになります。前の記事の番号+1を入れてください(旧サイトからの通し番号。1107まで使用済み)
         widget: number
-        required: false
+        value_type: int
+        min: 1
+        required: true
       - name: body
         label: 本文
         widget: markdown
