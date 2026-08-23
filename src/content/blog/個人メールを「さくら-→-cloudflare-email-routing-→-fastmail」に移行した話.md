@@ -1,6 +1,6 @@
 ---
 title: 個人メールを「さくら → Cloudflare Email Routing → Fastmail」に移行した話
-description: ''
+description: サービスごとに別のメールアドレスを登録する運用のため、個人メールをさくらのレンタルサーバー→Cloudflare Email Routing→Fastmailへ移行した記録。転送遅延で2段階認証が通らない、登録アドレスから送信できないといった課題と解決策をまとめました。
 pubDate: 2026-08-23T23:18:00+09:00
 updatedDate: ''
 categories:
